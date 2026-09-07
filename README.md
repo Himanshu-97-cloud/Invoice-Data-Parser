@@ -2,26 +2,80 @@
   <img src="frontend/src/assets/image.png" alt="Invoice Data Parser Banner" width="100%">
 </p>
 
-# Invoice Data Parser
 
-An AI-powered invoice parser that extracts invoice information from PDF and image files and saves the extracted data into an Excel spreadsheet.
+## Introduction
+
+**Invoice Data Parser** is an AI-powered application that extracts important information from invoices and converts it into a structured Excel file.
+
+The application accepts **PDF or image invoices**, extracts the text using PDF parsing or OCR, uses a local **Qwen LLM through Ollama** to understand and structure the invoice data, and finally stores the results in Excel.
+
+It can also append new invoice data to an existing Excel file.
+
+### Workflow
+
+```text
+Invoice (PDF / Image)
+        ↓
+Text Extraction / OCR
+        ↓
+Qwen LLM via Ollama
+        ↓
+Structured Invoice Data
+        ↓
+Excel Spreadsheet
+```
+
+---
 
 ## Features
 
-- Extracts text from PDF invoices
-- Extracts text from invoice images using OCR
-- Uses a local LLM to understand and structure invoice data
-- Supports single or multiple invoices in a PDF
-- Extracts invoice details and line items
-- Creates an Excel file automatically
-- Can append data to an existing Excel file
-- Simple React frontend
-- FastAPI backend
+* 📄 Supports PDF and image invoices
+* 🔍 OCR for scanned/image invoices
+* 🤖 AI-powered invoice data extraction
+* 🧾 Extracts invoice and line-item details
+* 📑 Supports multiple invoices in a PDF
+* 📊 Creates structured Excel spreadsheets
+* ➕ Can append data to an existing Excel file
+* 🌐 React-based user interface
+* ⚡ FastAPI backend
+* 🏠 Runs locally without external AI APIs
+
+---
+
+## Tech Stack
+
+### Frontend
+
+* React
+* Vite
+* Tailwind CSS
+* Lucide React
+
+### Backend
+
+* Python
+* FastAPI
+* Uvicorn
+
+### AI & Processing
+
+* Ollama
+* Qwen 2.5 7B
+* PyPDF
+* Tesseract OCR
+* Pytesseract
+* Pillow
+
+### Excel
+
+* OpenPyXL
+
+---
 
 ## Project Structure
 
 ```text
-invoice-data-parser/
+Invoice-Data-Parser/
 │
 ├── backend/
 │   ├── app.py
@@ -32,77 +86,73 @@ invoice-data-parser/
 │
 ├── frontend/
 │   ├── src/
+│   │   └── App.jsx
 │   ├── package.json
 │   └── ...
 │
-├── .gitignore
-└── README.md
-````
+├── assets/
+│   └── banner.png
+│
+├── README.md
+└── .gitignore
+```
 
-## Requirements
+---
 
-Make sure you have:
-
-* Python 3.10+
-* Node.js
-* Git
-* Tesseract OCR
-* Ollama
+# Run Locally
 
 ## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/invoice-data-parser.git
-cd invoice-data-parser
+git clone https://github.com/Himanshu-97-cloud/Invoice-Data-Parser.git
+cd Invoice-Data-Parser
 ```
 
-## 2. Setup the Backend
+---
 
-Create a virtual environment:
+## 2. Backend Setup
+
+Create a Python virtual environment:
 
 ```bash
 python -m venv venv
 ```
 
-Activate it on Windows:
+Activate it.
+
+### Windows
 
 ```bash
 venv\Scripts\activate
 ```
 
-Install Python dependencies:
+Install the required packages:
 
 ```bash
-pip install fastapi uvicorn python-multipart pypdf pytesseract pillow openpyxl ollama
+pip install -r backend/requirements.txt
 ```
+
+---
 
 ## 3. Install Tesseract OCR
 
-Install Tesseract OCR on your computer.
+Install **Tesseract OCR** on your computer.
 
-After installation, make sure Tesseract is available in your system PATH.
+Make sure the Tesseract executable is available to the application.
 
-You can check it with:
+---
 
-```bash
-tesseract --version
-```
+## 4. Install Ollama
 
-## 4. Setup Ollama
-
-Install Ollama and download the model used by this project:
+Install Ollama and download the Qwen model:
 
 ```bash
 ollama pull qwen2.5:7b
 ```
 
-Make sure Ollama is running before using the application.
+Make sure Ollama is running before processing invoices.
 
-You can check the model with:
-
-```bash
-ollama list
-```
+---
 
 ## 5. Start the Backend
 
@@ -118,88 +168,115 @@ The backend will run at:
 http://127.0.0.1:8000
 ```
 
-API documentation is available at:
-
-```text
-http://127.0.0.1:8000/docs
-```
+---
 
 ## 6. Start the Frontend
 
-Open another terminal and go to the frontend folder:
+Open another terminal:
 
 ```bash
 cd frontend
-```
-
-Install the dependencies:
-
-```bash
 npm install
-```
-
-Start the frontend:
-
-```bash
 npm run dev
 ```
 
-The frontend will be available at the URL shown in the terminal, usually:
+Open the local URL shown by Vite, usually:
 
 ```text
 http://localhost:5173
 ```
 
-## How to Use
+---
 
-1. Open the frontend in your browser.
-2. Upload an invoice PDF or image.
-3. Optionally upload an existing Excel file.
+# How to Use
+
+1. Open the React application.
+2. Upload an invoice in **PDF or image format**.
+3. Optionally upload an existing `.xlsx` file.
 4. Click **Process Invoice**.
-5. Wait while the invoice is processed.
-6. Download the generated Excel file.
+5. The backend extracts the invoice text.
+6. Qwen analyzes and structures the invoice data.
+7. The application creates or updates the Excel file.
+8. Download the generated Excel spreadsheet.
 
-If an existing Excel file is uploaded, the new invoice data will be added to it.
+---
 
-## Supported Files
+## Excel Output
 
-### Invoice
+The generated workbook contains two sheets:
 
-* PDF
-* JPG / JPEG
-* PNG
-* BMP
-* TIFF
+### Invoices
 
-### Excel
+Contains information such as:
 
-* XLSX
-* XLS
+* Invoice Number
+* Date
+* Seller
+* Seller Address
+* Seller Tax ID
+* Client
+* Client Address
+* Client Tax ID
+* Net Total
+* VAT
+* Gross Total
 
-## How It Works
+### Items
 
-```text
-Invoice PDF/Image
-       ↓
-Text Extraction / OCR
-       ↓
-Local LLM (Ollama)
-       ↓
-Structured Invoice Data
-       ↓
-Excel Spreadsheet
+Contains:
+
+* Invoice Number
+* Item Number
+* Description
+* Quantity
+* Unit
+* Net Price
+* Net Worth
+* VAT %
+* Gross Worth
+
+---
+
+## Troubleshooting
+
+### Ollama connection error
+
+Make sure Ollama is running and the model is installed:
+
+```bash
+ollama list
 ```
 
-## Important
+If Qwen is missing:
 
-* Ollama runs the AI model locally on your computer.
-* No OpenAI API key is required.
-* Do not upload private invoice data to GitHub.
-* Test files, generated Excel files, and environment files are excluded using `.gitignore`.
+```bash
+ollama pull qwen2.5:7b
+```
 
-## Future Improvements
+### Tesseract not found
 
-* Better handling of complex invoice layouts
-* More OCR improvements
-* Support for additional document formats
-* Improved validation of extracted invoice data
+Make sure Tesseract OCR is installed and its executable path is correctly configured.
+
+### Frontend cannot connect to backend
+
+Make sure the FastAPI server is running:
+
+```bash
+uvicorn backend.app:app --reload
+```
+
+Also verify that the frontend is using:
+
+```text
+http://127.0.0.1:8000
+```
+
+---
+
+## Conclusion
+
+Invoice Data Parser automates the process of extracting information from invoices and organizing it into usable Excel spreadsheets.
+
+It combines **OCR, PDF extraction, local LLM processing, FastAPI, React, and Excel automation** into one complete application.
+
+The project is designed to run locally and can be extended with additional invoice formats, validation, database storage, authentication, and cloud deployment in the future.
